@@ -12,9 +12,8 @@ export const QuestionForm = ({ nextDisplayOrder, onCreated }) => {
   const [error, setError] = useState('')
   const [timerSeconds, setTimerSeconds] = useState()
 
-  const updateOption = (index, value) => {
+  const updateOption = (index, field, value) =>
     setOptions((prev) => prev.map((o, i) => (i === index ? { ...o, [field]: value } : o)))
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -84,8 +83,8 @@ export const QuestionForm = ({ nextDisplayOrder, onCreated }) => {
               fullWidth
             />
             <TextField
-              label="Video URL if this option wins"
-              placeholder="Enter video URL"
+              label="Video URL if this option wins (optional)"
+              placeholder="https://pub-xxxx.r2.dev/option-a.mp4"
               value={option.videoUrl}
               onChange={(e) => updateOption(index, 'videoUrl', e.target.value)}
               fullWidth
