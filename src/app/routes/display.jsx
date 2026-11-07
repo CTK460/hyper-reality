@@ -1,4 +1,5 @@
-import { Box } from '@mui/material'
+import { useCallback, useState } from 'react'
+import { Box, Button } from '@mui/material'
 import { useSessionState } from '../../features/session/hooks/use-session-state.js'
 import { useSessionTimer } from '../../features/session/hooks/use-session-timer.js'
 import { useCurrentQuestion } from '../../features/session/hooks/use-current-question.js'
@@ -11,6 +12,11 @@ const QUESTION_PHASES = ['question', 'voting', 'results']
 const VIDEO_PHASES = ['idle', 'question', 'voting', 'results', 'video']
 
 export const DisplayRoute = () => {
+  const [blocked, setBlocked] = useState(false)
+  const [clicked, setClicked] = useState(false)
+  const soundOn = clicked || !blocked
+  const handleBlocked = useCallback(() => setBlocked(true), [])
+
   const { state, loading } = useSessionState()
   const timer = useSessionTimer(state, { autoFinish: true })
 
@@ -24,7 +30,15 @@ export const DisplayRoute = () => {
 
   return (
     <Box sx={{ position: 'relative', minHeight: '100vh', bgcolor: '#0b0c10' }}>
-      <VideoBackground videoUrl={videoUrl} dimmed={showBoard} />
+      <VideoBackground videoUrl={videoUrl} dimmed={showBoard} sound={soundOn} onSoundBlocked={handleBlocked} />
+
+      {blocked && !clicked && (
+        <Box sx={{ position: 'fixed', inset: 0, zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: 'rgba(11,12,16,0.85)' }}>
+          <Button variant="contained" size="large" onClick={() => setClicked(true)}>
+            Click to start
+          </Button>
+        </Box>
+      )}
 
       {(loading || !state || phase === 'not_started') && (
         <MessageScreen title="Waiting for the session to start" />

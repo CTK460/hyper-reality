@@ -1,17 +1,22 @@
 import { useEffect, useRef } from 'react'
 import { Box } from '@mui/material'
 
-// Muted required for autoplay, not clickable. Can change firefox mozilla settings to bypass but need to test
-export const VideoBackground = ({ videoUrl, dimmed = false }) => {
+export const VideoBackground = ({ videoUrl, dimmed = false, sound = false, onSoundBlocked }) => {
   const ref = useRef(null)
 
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    el.muted = true
-    const attempt = el.play?.()
-    if (attempt && typeof attempt.catch === 'function') attempt.catch(() => {})
-  }, [videoUrl])
+    const vid = ref.current
+    if (!vid) return
+    vid.muted = !sound
+    const attempt = vid.play?.()
+    if (attempt && typeof attempt.catch === 'function') {
+      attempt.catch(() => {
+        vid.muted = true
+        vid.play?.()?.catch?.(() => {})
+        if (sound) onSoundBlocked?.()
+      })
+    }
+  }, [videoUrl, sound, onSoundBlocked])
 
   if (!videoUrl) return null
 
@@ -23,7 +28,6 @@ export const VideoBackground = ({ videoUrl, dimmed = false }) => {
         key={videoUrl}
         src={videoUrl}
         autoPlay
-        muted
         playsInline
         preload="auto"
         disablePictureInPicture
