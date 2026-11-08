@@ -2,7 +2,7 @@ import { Paper, Stack, Typography } from '@mui/material'
 import { QRCodeSVG } from 'qrcode.react'
 
 export const JoinQrCode = () => {
-  const joinUrl = `${window.location.origin}/`
+  const joinUrl = `${window.location.origin}${import.meta.env.BASE_URL}`
 
   return (
     <Paper

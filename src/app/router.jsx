@@ -9,4 +9,4 @@ export const router = createBrowserRouter([
   { path: '/vote', element: <VoteRoute /> },
   { path: '/admin', element: <AdminRoute /> },
   { path: '/display', element: <DisplayRoute /> },
-])
+], { basename: import.meta.env.BASE_URL })
