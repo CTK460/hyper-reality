@@ -75,7 +75,6 @@ export const ResultsBoard = ({
           borderRadius: 5,
           bgcolor: 'rgba(176, 196, 224, 0.78)',
           backdropFilter: 'blur(6px)',
-          border: '4px solid rgba(255,255,255,0.85)',
           boxShadow: '0 12px 40px rgba(0,0,0,0.35)',
           overflow: 'hidden',
         }}
@@ -85,11 +84,11 @@ export const ResultsBoard = ({
             flexShrink: 0,
             px: 4,
             py: 'clamp(8px, 1.1vw, 16px)',
-            borderRadius: 4,
+            borderRadius: 5,
             bgcolor: '#5f86d6',
-            border: '3px solid rgba(255,255,255,0.9)',
             boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
             textAlign: 'center',
+            mb:5,
           }}
         >
           <Typography

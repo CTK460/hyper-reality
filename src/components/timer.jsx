@@ -1,4 +1,4 @@
-import { Box, LinearProgress, Typography } from '@mui/material'
+import { Box, LinearProgress } from '@mui/material'
 
 const formatTime = (totalSeconds) => {
   const s = Math.max(0, totalSeconds)
@@ -35,7 +35,7 @@ const Timer = ({ secondsLeft, seconds = 15, label, size = 'medium' }) => {
         sx={{
           fontFamily: '"Roboto Mono", ui-monospace, Menlo, Consolas, monospace',
           fontWeight: 700,
-          fontSize: big ? 'clamp(1.4rem, 2.6vw, 2.6rem)' : '1.6rem',
+          fontSize: big ? 'clamp(1.4rem, 4vw, 4rem)' : '1.6rem',
           letterSpacing: '0.06em',
           fontVariantNumeric: 'tabular-nums',
           lineHeight: 1.4,
