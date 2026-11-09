@@ -1,5 +1,4 @@
 import { Box, LinearProgress, Typography } from '@mui/material'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
 
 const formatTime = (totalSeconds) => {
   const s = Math.max(0, totalSeconds)
@@ -10,48 +9,56 @@ const formatTime = (totalSeconds) => {
  * Display only. The countdown comes from useSessionTimer,
  * so the admin, user and screen pages all show the same value.
  */
-const Timer = ({ secondsLeft, seconds = 15, size = 'medium', onDark = false }) => {
+const Timer = ({ secondsLeft, seconds = 15, label, size = 'medium' }) => {
   const urgent = secondsLeft <= 5 && secondsLeft > 0
-  const color = urgent ? (onDark ? 'error.light' : 'error.main') : onDark ? '#fff' : 'primary.main'
   const big = size === 'large'
 
   return (
-    <Box role="timer" sx={{ width: '100%', color }}>
+    <Box
+      role="timer"
+      sx={{
+        display: 'inline-block',
+        boxSizing: 'border-box',
+        width: big ? 'clamp(150px, 15vw, 260px)' : 130,
+        px: big ? 'clamp(12px, 1.6vw, 28px)' : 2,
+        pt: big ? 0.5 : 0.25,
+        pb: big ? 'clamp(8px, 1vw, 14px)' : 1,
+        borderRadius: 3,
+        bgcolor: '#14161c',
+        border: '3px solid #fff',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
+        textAlign: 'center',
+        color: urgent ? '#ff6b6b' : '#fff',
+      }}
+    >
       <Box
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: big ? 2 : 1,
+          fontFamily: '"Roboto Mono", ui-monospace, Menlo, Consolas, monospace',
+          fontWeight: 700,
+          fontSize: big ? 'clamp(1.4rem, 2.6vw, 2.6rem)' : '1.6rem',
+          letterSpacing: '0.06em',
+          fontVariantNumeric: 'tabular-nums',
+          lineHeight: 1.4,
         }}
       >
-        <AccessTimeIcon sx={{ fontSize: big ? 64 : 24 }}></AccessTimeIcon>
-        <Typography
-          component="span"
-          sx={{
-            fontSize: big ? 96 : 32,
-            fontWeight: 600,
-            lineHeight: 1,
-            color: onDark ? '#fff' : 'text.primary',
-            fontVariantNumeric: 'tabular-nums',
-          }}
-        >
-          {formatTime(secondsLeft)}
-        </Typography>
+        {label ?? formatTime(secondsLeft)}
       </Box>
 
-      <LinearProgress
-        variant="determinate"
-        color={urgent ? 'error' : 'primary'}
-        value={seconds > 0 ? Math.min(100, (secondsLeft / seconds) * 100) : 0}
-        sx={{
-          mt: 1.25,
-          height: 4,
-          borderRadius: 2,
-          ...(onDark && { bgcolor: 'rgba(255,255,255,0.25)' }),
-          '& .MuiLinearProgress-bar': { transition: 'transform 1s linear' },
-        }}
-      />
+      {!label && (
+        <LinearProgress
+          variant="determinate"
+          color={urgent ? 'error' : 'primary'}
+          value={seconds > 0 ? Math.min(100, (secondsLeft / seconds) * 100) : 0}
+          sx={{
+            mt: 0.5,
+            height: big ? 6 : 4,
+            borderRadius: 3,
+            bgcolor: 'rgba(255,255,255,0.25)',
+            visibility: label ? 'hidden' : 'visible',
+            '& .MuiLinearProgress-bar': { transition: 'transform 1s linear' },
+          }}
+        />
+      )}
     </Box>
   )
 }
