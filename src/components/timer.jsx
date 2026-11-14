@@ -9,9 +9,43 @@ const formatTime = (totalSeconds) => {
  * Display only. The countdown comes from useSessionTimer,
  * so the admin, user and screen pages all show the same value.
  */
-const Timer = ({ secondsLeft, seconds = 15, label, size = 'medium' }) => {
+const Timer = ({ secondsLeft, seconds = 15, label, size = 'medium', variant = 'pill' }) => {
   const urgent = secondsLeft <= 5 && secondsLeft > 0
   const big = size === 'large'
+
+  if (variant === 'band') {
+    return (
+      <Box role="timer" sx={{ width: '100%', bgcolor: '#0b0b0b', color: '#fff' }}>
+        <Box
+          sx={{
+            py: 2.5,
+            textAlign: 'center',
+            fontFamily: '"Orbitron", ui-monospace, Menlo, Consolas, monospace',
+            fontWeight: 700,
+            fontSize: '4rem',
+            letterSpacing: '0.08em',
+            fontVariantNumeric: 'tabular-nums',
+            lineHeight: 1,
+          }}
+        >
+          {label ?? formatTime(secondsLeft)}
+        </Box>
+        <LinearProgress
+          variant="determinate"
+          color={urgent ? 'error' : 'primary'}
+          value={seconds > 0 ? Math.min(100, (secondsLeft / seconds) * 100) : 0}
+          sx={{
+            mt: 0.5,
+            height: big ? 6 : 4,
+            borderRadius: 3,
+            bgcolor: 'rgba(255,255,255,0.25)',
+            visibility: label ? 'hidden' : 'visible',
+            '& .MuiLinearProgress-bar': { transition: 'transform 1s linear' },
+          }}
+        />
+      </Box>
+    )
+  }
 
   return (
     <Box
@@ -33,7 +67,7 @@ const Timer = ({ secondsLeft, seconds = 15, label, size = 'medium' }) => {
     >
       <Box
         sx={{
-          fontFamily: '"Roboto Mono", ui-monospace, Menlo, Consolas, monospace',
+          fontFamily: '"Orbitron", ui-monospace, Menlo, Consolas, monospace',
           fontWeight: 700,
           fontSize: big ? 'clamp(1.4rem, 4vw, 4rem)' : '1.6rem',
           letterSpacing: '0.06em',

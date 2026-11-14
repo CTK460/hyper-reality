@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import Timer from '../../../components/timer.jsx'
+import robot from '../../../assets/Robot mobile.png'
 
 const LETTER_COLORS = ['#3bb54a', '#2f6fd8', '#d63b3b']
 const LETTERS = 'ABC'
@@ -59,6 +60,18 @@ export const ResultsBoard = ({
         pb: 'clamp(14px, 2.4vw, 36px)',
       }}
     >
+      <Box
+        component="img"
+        src={robot}
+        alt=""
+        sx={{
+          position: 'absolute',
+          top: 'clamp(12px, 2.5vw, 32px)',
+          left: 'clamp(12px, 2.5vw, 40px)',
+          width: 'clamp(80px, 9vw, 150px)',
+          height: 'auto',
+        }}
+      />
       <Box sx={{ position: 'absolute', top: 'clamp(12px, 2.5vw, 32px)', right: 'clamp(12px, 2.5vw, 40px)' }}>
         <Timer secondsLeft={secondsLeft} seconds={timerSeconds} label={isResult ? 'RESULT' : undefined} size="large" />
       </Box>
@@ -191,7 +204,7 @@ export const ResultsBoard = ({
                         left: `${percent}%`,
                         transform: percent >= 14 ? 'translate(-100%, -50%)' : 'translate(0, -50%)',
                         px: 'clamp(8px, 1vw, 16px)',
-                        color: percent >= 14 ? '#fff' : '#1d2a44',
+                        color: '#fff',
                         fontWeight: 800,
                         lineHeight: 1,
                         fontSize: 'clamp(0.95rem, 1.7vw, 1.7rem)',
