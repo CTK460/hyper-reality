@@ -1,6 +1,7 @@
 import { Box, Container, Paper } from '@mui/material'
+import bg from '../../assets/check-bg.png'
 
-export const CenteredPage = ({ children, maxWidth = 440, background }) => (
+export const CenteredPage = ({ children, maxWidth = 440 }) => (
   <Box
     sx={{
       minHeight: '100vh',
@@ -8,9 +9,8 @@ export const CenteredPage = ({ children, maxWidth = 440, background }) => (
       alignItems: 'center',
       justifyContent: 'center',
       px: 3,
-      background:
-        background ??
-        'radial-gradient(circle at 20% 10%, #fbf3df 0%, #f6f4ee 45%)',
+      backgroundImage: `url(${bg})`,
+      backgroundSize: 'cover',
     }}
   >
     <Container disableGutters sx={{ maxWidth, m: 0 }}>

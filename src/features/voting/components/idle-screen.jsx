@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import robot from '../../../assets/Robot mobile.png'
+import bg from '../../../assets/check-bg.png'
 
 const COPY = {
   not_started: { title: 'Waiting for the session to start', sub: 'Welcome to the show!' },
@@ -24,6 +25,8 @@ export const IdleScreen = ({ phase, voterName }) => {
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
+          backgroundImage: `url(${bg})`,
+          backgroundSize: 'cover',
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',

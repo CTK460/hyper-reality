@@ -69,9 +69,10 @@ const Timer = ({ secondsLeft, seconds = 15, label, size = 'medium', variant = 'p
         sx={{
           fontFamily: '"Orbitron", ui-monospace, Menlo, Consolas, monospace',
           fontWeight: 700,
-          fontSize: big ? 'clamp(1.4rem, 4vw, 4rem)' : '1.6rem',
+          fontSize: big ? 'clamp(1.4rem, 4vw, 3.5rem)' : '1.6rem',
           letterSpacing: '0.06em',
           fontVariantNumeric: 'tabular-nums',
+          textAlign: 'center',
           lineHeight: 1.4,
         }}
       >
