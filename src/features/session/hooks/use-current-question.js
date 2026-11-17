@@ -3,7 +3,7 @@ import { getCurrentQuestion } from '../api/get-current-question.js'
 
 // Loads the live question + its options whenever the live question changes.
 // The result is stored together with its id, so a stale question is never shown.
-export const useCurrentQuestion = (questionId) => {
+export const useCurrentQuestion = (questionId, refreshKey) => {
   const [loaded, setLoaded] = useState(null)
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export const useCurrentQuestion = (questionId) => {
     return () => {
       cancelled = true
     }
-  }, [questionId])
+  }, [questionId, refreshKey])
 
   return { question: questionId && loaded?.id === questionId ? loaded : null }
 }

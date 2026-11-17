@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Alert, Button, Chip, Paper, Stack, Typography } from '@mui/material'
 import {
   startSession,
+  startScene,
+  endScene,
   sendQuestion,
   startTimer,
   nextVideo,
@@ -10,16 +12,18 @@ import {
 
 const PHASE_LABELS = {
   not_started: 'Not started',
-  idle: 'Session started',
+  welcome: 'Session started',
+  idle: 'Scene starting',
   question: 'Question live',
   voting: 'Voting open',
   results: 'Results shown',
   video: 'Video playing',
+  scene_end: 'Scene ended',
   ended: 'Session ended',
 }
 
 // The admin lane of the flow chart: at every step, exactly one button.
-export const SessionControl = ({ state, timer, nextQuestionText, onChanged }) => {
+export const SessionControl = ({ state, timer, nextQuestionText, nextScene, onChanged }) => {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
@@ -46,8 +50,14 @@ export const SessionControl = ({ state, timer, nextQuestionText, onChanged }) =>
   switch (phase) {
     case 'not_started':
     case 'ended':
-      primary = { label: phase === 'ended' ? 'Start a new session' : 'Start session', action: startSession }
-      hint = 'Plays the intro video on the display and gets the first question ready.'
+      primary = { label: phase === 'ended' ? 'Start a new session' : 'Start session', action: startSession, disabled: !nextScene }
+      hint = nextScene
+        ? 'The display shows a welcome message.'
+        : 'No scene has a starting question yet. Add questions and choose a scene start in the Questions tab.'
+      break
+    case 'welcome':
+      primary = { label: `Start Scene ${nextScene}`, action: () => startScene(nextScene), disabled: !nextScene }
+      hint = 'Plays the scene’s first video on the display and gets its first question ready.'
       break
     case 'idle':
       primary = { label: 'Send first question live', action: sendQuestion }
@@ -67,17 +77,26 @@ export const SessionControl = ({ state, timer, nextQuestionText, onChanged }) =>
       break
     case 'video':
       if (state.current_video_is_last) {
-        primary = { label: 'End session', action: endSession, color: 'error' }
-        hint = 'This is the last video.'
+        primary = { label: `End Scene ${state.current_scene}`, action: endScene }
+        hint = 'This was the last video of the scene. The display will show that the scene has ended.'
       } else {
         primary = { label: 'Send next question live', action: sendQuestion }
         hint = upNext
       }
       break
+    case 'scene_end':
+      if (nextScene) {
+        primary = { label: `Start Scene ${nextScene}`, action: () => startScene(nextScene) }
+        hint = `Scene ${state.current_scene} has ended. Nothing starts until you press this.`
+      } else {
+        primary = { label: 'End session', action: endSession, color: 'error' }
+        hint = 'All scenes are done. The display will show the thank-you message.'
+      }
+      break
     default:
   }
 
-  const canEndEarly = !['not_started', 'ended'].includes(phase) && !(phase === 'video' && state.current_video_is_last)
+  const canEndEarly = !['not_started', 'ended'].includes(phase) && !(phase === 'scene_end' && !nextScene)
 
   return (
     <Paper elevation={0} sx={{ p: 3, borderRadius: 3, border: '1px solid', borderColor: 'divider' }}>
@@ -88,7 +107,7 @@ export const SessionControl = ({ state, timer, nextQuestionText, onChanged }) =>
           </Typography>
           <Chip
             size="small"
-            label={PHASE_LABELS[phase]}
+            label={state.current_scene > 0 && !['not_started', 'welcome', 'ended'].includes(phase) ? `Scene ${state.current_scene} · ${PHASE_LABELS[phase]}` : PHASE_LABELS[phase]}
             color={phase === 'voting' ? 'warning' : phase === 'ended' || phase === 'not_started' ? 'default' : 'primary'}
           />
         </Stack>

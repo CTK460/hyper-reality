@@ -12,7 +12,7 @@ import { useSessionState } from '../../features/session/hooks/use-session-state.
 import { useSessionTimer } from '../../features/session/hooks/use-session-timer.js'
 import { useCurrentQuestion } from '../../features/session/hooks/use-current-question.js'
 import { SessionControl } from '../../features/session/components/session-control.jsx'
-import { IntroVideoField } from '../../features/session/components/intro-video-field.jsx'
+import { SceneVideosField } from '../../features/session/components/scene-videos-field.jsx'
 import { useLiveResults } from '../../features/results/hooks/use-live-results.js'
 import { ResultBars } from '../../features/results/components/result-bars.jsx'
 
@@ -44,6 +44,12 @@ const AdminDashboard = () => {
   const { counts, totalVoters } = useLiveResults(questionId, phase)
 
   const nextQuestion = questions.find((q) => q.id === state?.next_question_id)
+  const playedScene = ['not_started', 'welcome', 'ended'].includes(phase) ? 0 : state?.current_scene ?? 0
+  const nextScene =
+    questions
+      .filter((q) => q.is_first && q.scene > playedScene)
+      .map((q) => q.scene)
+      .sort((x, y) => x - y)[0] ?? null
   const totalVotes = Object.values(counts).reduce((a, b) => a + b, 0)
 
   return (
@@ -67,6 +73,7 @@ const AdminDashboard = () => {
               state={state}
               timer={timer}
               nextQuestionText={nextQuestion?.question_text}
+              nextScene={nextScene}
               onChanged={refetchState}
             />
 
@@ -93,7 +100,7 @@ const AdminDashboard = () => {
 
         {tab === 1 && (
           <Stack spacing={4}>
-            <IntroVideoField value={state?.intro_video_url} onSaved={refetchState} />
+            <SceneVideosField />
             <QuestionForm nextDisplayOrder={questions.length} onCreated={refetchQuestions} />
             {questionsError && <Typography color="error">{questionsError}</Typography>}
             <QuestionList questions={questions} onChanged={refetchQuestions} />

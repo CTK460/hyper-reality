@@ -3,7 +3,7 @@ import { supabase } from '../../../lib/supabaseClient.js'
 export const getQuestions = async () => {
   const { data, error } = await supabase
     .from('questions')
-    .select('id, question_text, timer_seconds, is_first, display_order, options!question_id(id, option_text, display_order, video_url, next_question_id)')
+    .select('id, question_text, timer_seconds, is_first, scene, display_order, options!question_id(id, option_text, display_order, video_url, next_question_id, is_disabled)')
     .order('display_order')
 
   if (error) throw error

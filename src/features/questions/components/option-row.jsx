@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { Alert, MenuItem, Stack, TextField, Typography } from '@mui/material'
+import {  Alert, FormControlLabel, MenuItem, Stack, Switch, TextField, Typography } from '@mui/material'
 import { updateOption } from '../api/update-option.js'
 
-// One answer: its video (saved on blur) and which question comes next (saved on change).
 export const OptionRow = ({ option, otherQuestions, onChanged }) => {
   const [draftVideo, setDraftVideo] = useState(null) // only set while typing
   const [error, setError] = useState('')
@@ -27,7 +26,21 @@ export const OptionRow = ({ option, otherQuestions, onChanged }) => {
 
   return (
     <Stack spacing={1} sx={{ py: 1.5 }}>
-      <Typography sx={{ fontWeight: 600 }}>{option.option_text}</Typography>
+      <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
+      <Typography sx={{ fontWeight: 600, color: option.is_disabled ? 'text.disabled' : 'text.primary' }}>
+        {option.option_text}
+      </Typography>
+      <FormControlLabel
+        label="Disabled"
+        control={
+          <Switch
+            size="small"
+            checked={Boolean(option.is_disabled)}
+            onChange={(e) => save({ is_disabled: e.target.checked })}
+          />
+        }
+      />
+    </Stack>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
         <TextField
           size="small"

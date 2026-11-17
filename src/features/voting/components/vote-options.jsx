@@ -1,6 +1,6 @@
 import { Box, Paper, Stack, Typography } from '@mui/material'
 
-const OPTION_COLORS = ['#63c74d', '#3a46b4', '#c0392b']
+const OPTION_COLORS = ['#3bb54a', '#2f6fd8', '#d63b3b']
 const LETTERS = 'ABC'
 
 export const VoteOptions = ({ options, myVoteOptionId, submitting, disabled, onVote }) => (
@@ -8,7 +8,8 @@ export const VoteOptions = ({ options, myVoteOptionId, submitting, disabled, onV
     {options.map((option, index) => {
       const isMine = myVoteOptionId === option.id
       const isLocked = Boolean(myVoteOptionId) || disabled
-      const color = OPTION_COLORS[index % OPTION_COLORS.length]
+      const isOff = Boolean(option.is_disabled)
+      const color = isOff ? '#9aa0a6' : OPTION_COLORS[index % OPTION_COLORS.length]
 
       return (
         <Box
@@ -16,7 +17,7 @@ export const VoteOptions = ({ options, myVoteOptionId, submitting, disabled, onV
           sx={{
             display: 'flex',
             alignItems: 'center',
-            opacity: isLocked && !isMine ? 0.3 : 1,
+            opacity: isOff ? 0.5 : isLocked && !isMine ? 0.3 : 1,
             transition: 'opacity 0.2s',
           }}
         >
@@ -45,7 +46,7 @@ export const VoteOptions = ({ options, myVoteOptionId, submitting, disabled, onV
           <Paper
             component="button"
             onClick={() => onVote(option.id)}
-            disabled={isLocked || submitting}
+            disabled={isLocked || submitting || isOff}
             elevation={0}
             sx={{
               flex: 1,
@@ -61,7 +62,7 @@ export const VoteOptions = ({ options, myVoteOptionId, submitting, disabled, onV
               border: 0,
               bgcolor: color,
               color: '#fff',
-              cursor: isLocked ? 'default' : 'pointer',
+              cursor: isLocked || isOff ? 'default' : 'pointer',
               font: 'inherit',
               fontSize: '1.05rem',
               fontWeight: 700,
