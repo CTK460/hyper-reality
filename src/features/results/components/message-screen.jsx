@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from '@mui/material'
 
-export const MessageScreen = ({ title, subtitle }) => (
+export const MessageScreen = ({ title, subtitle, QRcode }) => (
   <Box
     sx={{
       position: 'relative',
@@ -22,6 +22,19 @@ export const MessageScreen = ({ title, subtitle }) => (
         <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.7)', fontWeight: 400 }}>
           {subtitle}
         </Typography>
+      )}
+      {QRcode && (
+        <Box
+          component="img"
+          src={QRcode}
+          alt="QR code"
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            width: 400,
+            height: 400,
+          }}
+        />
       )}
     </Stack>
   </Box>
