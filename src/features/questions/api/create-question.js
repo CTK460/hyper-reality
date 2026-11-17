@@ -1,12 +1,13 @@
 import { supabase } from '../../../lib/supabaseClient.js'
 
-export const createQuestion = async ({ questionText, timerSeconds, options, displayOrder }) => {
+export const createQuestion = async ({ questionText, timerSeconds, options, displayOrder, scene = 1 }) => {
   const { data: question, error } = await supabase
     .from('questions')
     .insert({
       question_text: questionText,
       timer_seconds: timerSeconds,
       display_order: displayOrder,
+      scene,
     })
     .select('id')
     .single()

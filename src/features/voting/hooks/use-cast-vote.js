@@ -36,6 +36,9 @@ export const useCastVote = ({ questionId, voterId, onInvalidVoter }) => {
       if (result === 'closed') {
         setVote({ key, optionId: null })
         setProblem({ key, message: 'Voting has just closed.' })
+      } else if (result === 'disabled') {
+        setVote({ key, optionId: null })
+        setProblem({ key, message: 'That option is not available.' })
       } else if (result === 'invalid') {
         setVote({ key, optionId: null })
         onInvalidVoter?.()

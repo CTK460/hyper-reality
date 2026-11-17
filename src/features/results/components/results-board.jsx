@@ -5,7 +5,9 @@ import robot from '../../../assets/Robot mobile.png'
 const LETTER_COLORS = ['#3bb54a', '#2f6fd8', '#d63b3b']
 const LETTERS = 'ABC'
 
-const LetterBadge = ({ index }) => (
+const DISABLED_COLOR = '#9aa0a6'
+
+const LetterBadge = ({ index, disabled = false }) => (
   <Box
     sx={{
       zIndex: 1,
@@ -14,7 +16,7 @@ const LetterBadge = ({ index }) => (
       height: 'clamp(48px, 5.2vw, 84px)',
       mr: 'clamp(-22px, -1.8vw, -14px)',
       borderRadius: '50%',
-      bgcolor: LETTER_COLORS[index % LETTER_COLORS.length],
+      bgcolor: disabled ? DISABLED_COLOR : LETTER_COLORS[index % LETTER_COLORS.length],
       border: '4px solid #fff',
       boxShadow: '0 3px 10px rgba(0,0,0,0.3)',
       display: 'flex',
@@ -162,13 +164,14 @@ export const ResultsBoard = ({
               options.map((option, i) => {
                 const count = counts[option.id] || 0
                 const percent = totalVotes ? Math.round((count / totalVotes) * 100) : 0
-                const color = LETTER_COLORS[i % LETTER_COLORS.length]
-                const isLeader = max > 0 && count === max
+                const off = Boolean(option.is_disabled)
+                const color = off ? DISABLED_COLOR : LETTER_COLORS[i % LETTER_COLORS.length]
+                const isLeader = !off && max > 0 && count === max
 
                 return (
-                  <Box key={option.id} sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <Box key={option.id} sx={{ display: 'flex', flexDirection: 'column', opacity: off ? 0.55 : 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <LetterBadge index={i} />
+                      <LetterBadge index={i} disabled={off} />
                       <Box
                         sx={{
                           flex: 1,
@@ -177,8 +180,8 @@ export const ResultsBoard = ({
                           pr: 'clamp(16px, 3vw, 48px)',
                           py: 'clamp(8px, 1.2vw, 20px)',
                           borderRadius: 4,
-                          bgcolor: 'rgba(255,255,255,0.94)',
-                          color: '#1d2a44',
+                          bgcolor: off ? 'rgba(235,237,240,0.9)' : 'rgba(255,255,255,0.94)',
+                          color: off ? '#8a8d97' : '#1d2a44',
                           border: '3px solid rgba(255,255,255,0.95)',
                           boxShadow: isLeader ? `0 0 0 3px ${color}88` : 'none',
                           textAlign: 'center',

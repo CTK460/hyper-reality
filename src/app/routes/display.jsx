@@ -22,7 +22,7 @@ export const DisplayRoute = () => {
 
   const phase = state?.phase
   const questionId = QUESTION_PHASES.includes(phase) ? state.current_question_id : null
-  const { question } = useCurrentQuestion(questionId)
+  const { question } = useCurrentQuestion(questionId, state?.updated_at)
   const { counts, totalVoters } = useLiveResults(questionId, phase)
 
   const showBoard = Boolean(questionId && question)
@@ -44,6 +44,8 @@ export const DisplayRoute = () => {
         <MessageScreen title="Waiting for the session to start" />
       )}
       {phase === 'ended' && <MessageScreen title="Thanks for taking part!" pulsing={false} />}
+      {phase === 'welcome' && <MessageScreen title="Welcome!" subtitle="The show is about to begin." />}
+      {phase === 'scene_end' && (<MessageScreen title="" subtitle="" />)}
       {phase === 'idle' && !videoUrl && <MessageScreen title="Get ready…" />}
 
       {showBoard && (
