@@ -29,7 +29,7 @@ export const VoteRoute = () => {
   const phase = state?.phase
   const questionId = QUESTION_PHASES.includes(phase) ? state.current_question_id : null
 
-  const { question } = useCurrentQuestion(questionId)
+  const { question } = useCurrentQuestion(questionId, state?.updated_at)
   const { myVoteOptionId, submitting, error, castVote } = useCastVote({
     questionId,
     voterId,

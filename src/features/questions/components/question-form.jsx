@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Alert, Button, Paper, Stack, TextField, Typography } from '@mui/material'
+import { Alert, Button, MenuItem, Paper, Stack, TextField, Typography } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import { createQuestion } from '../api/create-question.js'
 
@@ -11,6 +11,7 @@ export const QuestionForm = ({ nextDisplayOrder, onCreated }) => {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [timerSeconds, setTimerSeconds] = useState()
+  const [scene, setScene] = useState(1)
 
   const updateOption = (index, field, value) =>
     setOptions((prev) => prev.map((o, i) => (i === index ? { ...o, [field]: value } : o)))
@@ -41,7 +42,8 @@ export const QuestionForm = ({ nextDisplayOrder, onCreated }) => {
         questionText: text,
         options: cleanedOptions,
         displayOrder: nextDisplayOrder,
-        timerSeconds: seconds
+        timerSeconds: seconds,
+        scene,
       })
       setQuestionText('')
       setOptions([emptyOption(), emptyOption()])
@@ -71,6 +73,11 @@ export const QuestionForm = ({ nextDisplayOrder, onCreated }) => {
           onChange={(e) => setTimerSeconds(e.target.value)}
           sx={{ minWidth: 150 }}
         />
+        <TextField select label="Scene" value={scene} onChange={(e) => setScene(Number(e.target.value))} sx={{ minWidth: 120 }}>
+          {[1, 2, 3].map((n) => (
+            <MenuItem key={n} value={n}>Scene {n}</MenuItem>
+          ))}
+        </TextField>
       </Stack>
       
       {options.map((option, index) => (

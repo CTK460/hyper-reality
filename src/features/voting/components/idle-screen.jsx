@@ -5,6 +5,8 @@ import bg from '../../../assets/check-bg.png'
 const COPY = {
   not_started: { title: 'Waiting for the session to start', sub: 'Welcome to the show!' },
   idle: { title: 'Look at the play in front of you!', sub: 'The first question and options will appear in a while' },
+  welcome: { title: 'Welcome!', sub: 'The show is about to begin.' },
+  scene_end: { title: 'Look at the play in front of you!', sub: 'The next scene will begin shortly.' },
   video: { title: 'Look at the play in front of you!', sub: 'The question and options will appear in a while' },
 }
 

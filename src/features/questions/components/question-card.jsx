@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Alert, Button, Chip, Divider, IconButton, Paper, Stack, TextField, Tooltip, Typography } from '@mui/material'
+import { Alert, Button, Chip, Divider, IconButton, MenuItem, Paper, Stack, TextField, Tooltip, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import { OptionRow } from './option-row.jsx'
 import { setFirstQuestion } from '../api/set-first-question.js'
 import { deleteQuestion } from '../api/delete-question.js'
 import { updateQuestion } from '../api/update-question.js'
+import { setQuestionScene } from '../api/set-question-scene.js'
 
 export const QuestionCard = ({ question, allQuestions, onChanged }) => {
   const [error, setError] = useState('')
@@ -32,7 +33,7 @@ export const QuestionCard = ({ question, allQuestions, onChanged }) => {
     setDraftTimer(null)
   }
 
-  const otherQuestions = allQuestions.filter((q) => q.id !== question.id)
+  const otherQuestions = allQuestions.filter((q) => q.id !== question.id && q.scene === question.scene)
 
   return (
     <Paper elevation={0} sx={{ p: 2.5, borderRadius: 3, border: '1px solid', borderColor: question.is_first ? 'primary.main' : 'divider' }}>
@@ -43,7 +44,7 @@ export const QuestionCard = ({ question, allQuestions, onChanged }) => {
               {question.question_text}
             </Typography>
             <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-              {question.is_first && <Chip size="small" color="primary" label="First question" />}
+              {question.is_first && <Chip size="small" color="primary" label={`Starts scene ${question.scene}`} />}
               <TextField
                 size="small"
                 type="number"
@@ -53,13 +54,25 @@ export const QuestionCard = ({ question, allQuestions, onChanged }) => {
                 onBlur={saveTimer}
                 sx={{ width: 110 }}
               />
+              <TextField
+                select
+                size="small"
+                label="Scene"
+                value={question.scene}
+                onChange={(e) => run(() => setQuestionScene(question.id, Number(e.target.value)))}
+                sx={{ width: 110 }}
+              >
+                {[1, 2, 3].map((n) => (
+                  <MenuItem key={n} value={n}>Scene {n}</MenuItem>
+                ))}
+              </TextField>
             </Stack>
           </Stack>
 
           <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
             {!question.is_first && (
               <Button size="small" variant="outlined" onClick={() => run(() => setFirstQuestion(question.id))}>
-                Set as first
+                Set as scene start
               </Button>
             )}
             <Tooltip title="Delete question">
