@@ -7,6 +7,7 @@ import { useLiveResults } from '../../features/results/hooks/use-live-results.js
 import { VideoBackground } from '../../features/results/components/video-background.jsx'
 import { ResultsBoard } from '../../features/results/components/results-board.jsx'
 import { MessageScreen } from '../../features/results/components/message-screen.jsx'
+import QR from '../../assets/QR.png'
 
 const QUESTION_PHASES = ['question', 'voting', 'results']
 const VIDEO_PHASES = ['idle', 'question', 'voting', 'results', 'video']
@@ -44,7 +45,7 @@ export const DisplayRoute = () => {
         <MessageScreen title="Waiting for the session to start" />
       )}
       {phase === 'ended' && <MessageScreen title="Thanks for taking part!" pulsing={false} />}
-      {phase === 'welcome' && <MessageScreen title="Welcome!" subtitle="The show is about to begin." />}
+      {phase === 'welcome' && (<MessageScreen title="Welcome!" subtitle="Please Join using the QR code below"  QRcode={QR}/>)}
       {phase === 'scene_end' && (<MessageScreen title="" subtitle="" />)}
       {phase === 'idle' && !videoUrl && <MessageScreen title="Get ready…" />}
 
